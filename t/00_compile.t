@@ -1,9 +1,9 @@
 use strict;
-use Test::More 0.98;
+use warnings;
 
-use_ok $_ for qw(
-    Text::HyperScript
-);
+use Test2::V0;
+use Text::HyperScript;
+
+ok(1);
 
 done_testing;
-

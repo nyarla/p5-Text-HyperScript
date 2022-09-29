@@ -1,28 +1,110 @@
-package Text::HyperScript;
 use 5.008001;
 use strict;
 use warnings;
 
+package Text::HyperScript;
+
 our $VERSION = "0.01";
 
+use Exporter::Lite;
 
+our @EXPORT = qw(raw true false);
+
+sub raw {
+    my $html = shift;
+    return Text::HyperScript::HTML->new($html);
+}
+
+sub true {
+    my $true = !!1;
+    return bless \$true, 'Text::HyperScript::Boolean';
+}
+
+sub false {
+    my $false = !!0;
+    return bless \$false, 'Text::HyperScript::Boolean';
+}
 
 1;
-__END__
+
+package Text::HyperScript::HTML;
+
+use overload q("") => \&html;
+
+sub new {
+    my ( $class, $html ) = @_;
+    return bless \$html, $class;
+}
+
+sub html {
+    return ${ $_[0] };
+}
+
+package Text::HyperScript::Boolean;
+
+use overload ( q(bool) => \&is_true, q(==) => \&is_true );
+
+sub is_true {
+    return !!${ $_[0] };
+}
+
+sub is_false {
+    return !${ $_[0] };
+}
+
+package Text::HyperScript;
+
+1;
 
 =encoding utf-8
 
 =head1 NAME
 
-Text::HyperScript - It's new $module
+Text::HyperScript - The HyperScript library for Perl.
 
 =head1 SYNOPSIS
 
-    use Text::HyperScript;
+    # TODO
 
 =head1 DESCRIPTION
 
-Text::HyperScript is ...
+TODO
+
+=head1 FUNCTIONS
+
+=head2 raw
+
+This function return raw html instance of C<Text::HyperScript::HTML>.
+
+B<Return value does not auto escape of html>.
+
+This function has risk of XSS or other script injection. Please be careful.
+
+=head2 true / false
+
+This functions return blessed boolean value of C<Text::HyperScript::Boolean>.
+
+C<Text::HyperScript::Boolean> has two methods:
+
+=over
+
+=item is_ture : Bool
+
+If boolean value pointed to true value, this method return true.
+Otherwise return false.
+
+=item is_false : Bool
+
+If boolean value pointed to false value, this method return true.
+Otherwise return false.
+
+=back
+
+This function values uses for html5 boolean attributes.
+
+For exmaple:
+
+  my $script = h('script', { crossorigin => true }, '...') # return <script crossorigin>...</script> 
 
 =head1 LICENSE
 
@@ -36,4 +118,3 @@ it under the same terms as Perl itself.
 nyarla E<lt>nyarla@kalaclista.comE<gt>
 
 =cut
-
