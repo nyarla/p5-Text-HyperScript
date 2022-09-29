@@ -9,7 +9,7 @@ our $VERSION = "0.01";
 use Exporter::Lite;
 use HTML::Escape ();
 
-our @EXPORT = qw(raw true false);
+our @EXPORT = qw(raw true false text);
 
 sub raw {
     my $html = shift;
