@@ -7,10 +7,10 @@ use Text::HyperScript qw(raw);
 sub main {
     my $raw = raw('<p>hello, world!</p>');
 
-    isa_ok( $raw, 'Text::HyperScript::HTML' );
+    isa_ok( $raw, 'Text::HyperScript::Element' );
 
-    is( $raw->html, '<p>hello, world!</p>' );
-    is( "${raw}",   '<p>hello, world!</p>' );
+    is( $raw->markup, '<p>hello, world!</p>' );
+    is( "${raw}",     '<p>hello, world!</p>' );
 
     done_testing;
 }

@@ -13,7 +13,7 @@ our @EXPORT = qw(raw true false text h);
 
 sub raw {
     my $html = shift;
-    return Text::HyperScript::HTML->new($html);
+    return Text::HyperScript::Element->new($html);
 }
 
 sub true {
@@ -38,8 +38,8 @@ sub h {
     my @contents;
 
     for my $data (@_) {
-        if ( ref $data eq 'Text::HyperScript::HTML' ) {
-            push @contents, $data->html;
+        if ( ref $data eq 'Text::HyperScript::Element' ) {
+            push @contents, $data->markup;
             next;
         }
 
@@ -137,22 +137,22 @@ sub h {
     }
 
     if ( @contents == 0 ) {
-        return Text::HyperScript::HTML->new(qq(<${tag}${attrs} />));
+        return Text::HyperScript::Element->new(qq(<${tag}${attrs} />));
     }
 
-    return Text::HyperScript::HTML->new( qq(<${tag}${attrs}>) . ( join q{}, @contents ) . qq(</${tag}>) );
+    return Text::HyperScript::Element->new( qq(<${tag}${attrs}>) . ( join q{}, @contents ) . qq(</${tag}>) );
 }
 
-package Text::HyperScript::HTML;
+package Text::HyperScript::Element;
 
-use overload q("") => \&html;
+use overload q("") => \&markup;
 
 sub new {
     my ( $class, $html ) = @_;
     return bless \$html, $class;
 }
 
-sub html {
+sub markup {
     return ${ $_[0] };
 }
 
