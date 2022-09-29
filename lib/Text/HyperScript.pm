@@ -9,7 +9,7 @@ our $VERSION = "0.01";
 use Exporter::Lite;
 use HTML::Escape ();
 
-our @EXPORT = qw(raw true false text);
+our @EXPORT = qw(raw true false text h);
 
 sub raw {
     my $html = shift;
@@ -29,6 +29,117 @@ sub false {
 sub text {
     my $text = shift;
     return HTML::Escape::escape_html($text);
+}
+
+sub h {
+    my $tag = HTML::Escape::escape_html(shift);
+
+    my %attrs;
+    my @contents;
+
+    for my $data (@_) {
+        if ( ref $data eq 'Text::HyperScript::HTML' ) {
+            push @contents, $data->html;
+            next;
+        }
+
+        if ( ref $data eq 'HASH' ) {
+            %attrs = ( %attrs, %{$data} );
+            next;
+        }
+
+        if ( ref $data eq 'ARRAY' ) {
+            push @contents, @{$data};
+            next;
+        }
+
+        push @contents, text($data);
+    }
+
+    my $attrs = q{};
+    for my $prefix ( sort keys %attrs ) {
+        my $data = $attrs{$prefix};
+        if ( !ref $data ) {
+            $attrs .= q{ };
+            $attrs .= HTML::Escape::escape_html($prefix);
+            $attrs .= q{="};
+            $attrs .= HTML::Escape::escape_html($data);
+            $attrs .= q{"};
+
+            next;
+        }
+
+        if ( ref $data eq 'Text::HyperScript::Boolean' && $data->is_ture ) {
+            $attrs .= HTML::Escape::escape_html($prefix);
+
+            next;
+        }
+
+        if ( ref $data eq 'HASH' ) {
+        PREFIX:
+            for my $suffix ( sort keys %{$data} ) {
+                my $key   = HTML::Escape::escape_html($prefix) . '-' . HTML::Escape::escape_html($suffix);
+                my $value = $data->{$suffix};
+
+                if ( !ref $value ) {
+                    $attrs .= " ";
+                    $attrs .= $key;
+                    $attrs .= q{="};
+                    $attrs .= HTML::Escape::escape_html($value);
+                    $attrs .= q{"};
+
+                    next PREFIX;
+                }
+
+                if ( ref $value eq 'Text::HyperScript::Boolean' && $value->is_ture ) {
+                    $attrs .= " ";
+                    $attrs .= $key;
+
+                    next PREFIX;
+                }
+
+                if ( ref $value eq 'ARRAY' ) {
+                    $attrs .= q{ };
+                    $attrs .= $key;
+                    $attrs .= q{="};
+                    $attrs .= join q{ }, map { HTML::Escape::escape_html($_) } sort @{$value};
+                    $attrs .= q{"};
+
+                    next PREFIX;
+                }
+
+                $attrs .= " ";
+                $attrs .= $key;
+                $attrs .= q{="};
+                $attrs .= HTML::Escape::escape_html($value);
+                $attrs .= q{"};
+            }
+
+            next;
+        }
+
+        if ( ref $data eq 'ARRAY' ) {
+            $attrs .= q{ };
+            $attrs .= HTML::Escape::escape_html($prefix);
+            $attrs .= q{="};
+            $attrs .= join q{ }, map { HTML::Escape::escape_html($_) } sort @{$data};
+            $attrs .= q{"};
+
+            next;
+        }
+
+        $attrs .= q{ };
+        $attrs .= HTML::Escape::escape_html($prefix);
+        $attrs .= q{="};
+        $attrs .= HTML::Escape::escape_html($data);
+        $attrs .= q{"};
+    }
+
+    if ( @contents == 0 ) {
+        return Text::HyperScript::HTML->new(qq(<${tag}${attrs} />));
+    }
+
+    return Text::HyperScript::HTML->new( qq(<${tag}${attrs}>) . ( join q{}, @contents ) . qq(</${tag}>) );
 }
 
 package Text::HyperScript::HTML;
