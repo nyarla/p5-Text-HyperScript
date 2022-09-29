@@ -1,4 +1,4 @@
-
+[![Actions Status](https://github.com/nyarla/p5-Text-HyperScript/actions/workflows/test.yml/badge.svg)](https://github.com/nyarla/p5-Text-HyperScript/actions)
 # NAME
 
 Text::HyperScript - The HyperScript library for Perl.
@@ -12,6 +12,13 @@ Text::HyperScript - The HyperScript library for Perl.
 TODO
 
 # FUNCTIONS
+
+## text
+
+This function return **escaped html** string.
+
+This is useful for display text content from untrusted content,
+Or contian special characters of html.
 
 ## raw
 

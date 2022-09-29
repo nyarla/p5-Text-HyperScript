@@ -7,6 +7,7 @@ package Text::HyperScript;
 our $VERSION = "0.01";
 
 use Exporter::Lite;
+use HTML::Escape ();
 
 our @EXPORT = qw(raw true false);
 
@@ -23,6 +24,11 @@ sub true {
 sub false {
     my $false = !!0;
     return bless \$false, 'Text::HyperScript::Boolean';
+}
+
+sub text {
+    my $text = shift;
+    return HTML::Escape::escape_html($text);
 }
 
 1;
@@ -71,6 +77,13 @@ Text::HyperScript - The HyperScript library for Perl.
 TODO
 
 =head1 FUNCTIONS
+
+=head2 text
+
+This function return B<escaped html> string.
+
+This is useful for display text content from untrusted content,
+Or contian special characters of html.
 
 =head2 raw
 
