@@ -4,7 +4,7 @@ use warnings;
 
 package Text::HyperScript;
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 use Exporter::Lite;
 use HTML::Escape ();

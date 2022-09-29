@@ -2,6 +2,11 @@ Revision history for Perl extension Text-HyperScript
 
 {{$NEXT}}
 
+0.02 2022-09-29T14:00:07Z
+
+    - Rename Text::HyperScript::HTML to Text::HyperScript::Element
+    - Rewrite POD for 0.02 release
+
 0.01 2022-09-29T07:08:27Z
 
     - The first version of Text::HyperScript
