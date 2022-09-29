@@ -353,13 +353,13 @@ Because perl's sort of hash keys always randomized.
 
 =head1 LICENSE
 
-Copyright (C) nyarla.
+Copyright (C) OKAMURA Naoki aka nyarla.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-OKAMURA Naoki aka E<lt>nyarla@kalaclista.comE<gt>
+OKAMURA Naoki aka nyarla: E<lt>nyarla@kalaclista.comE<gt>
 
 =cut

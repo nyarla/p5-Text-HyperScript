@@ -162,11 +162,11 @@ Because perl's sort of hash keys always randomized.
 
 # LICENSE
 
-Copyright (C) nyarla.
+Copyright (C) OKAMURA Naoki aka nyarla.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 # AUTHOR
 
-OKAMURA Naoki aka <nyarla@kalaclista.com>
+OKAMURA Naoki aka nyarla: <nyarla@kalaclista.com>
