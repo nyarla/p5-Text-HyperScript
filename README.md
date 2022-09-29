@@ -62,7 +62,7 @@ This function is complex. but it's powerful.
 
     Result of attributes sorted by alphabetical according.
 
-    You could pass to multiple theses types as attribute values:
+    You could pass to theses types as attribute values:
 
     - `Str`
 
@@ -110,7 +110,7 @@ This function is complex. but it's powerful.
 
         Plain text as content.
 
-        This value always applied html/xml escape by [HTML::Escape::escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%3A%3Aescape_html).
+        This value always applied html/xml escape by [HTML::Escape#escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%23escape_html).
 
     - `Text::HyperScript::Element`
 
@@ -135,14 +135,14 @@ that return text with html/xml markup.
 
 The value of `Text::HyperScript::Element` is not escaped by [HTML::Escape::escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%3A%3Aescape_html),
 you should not use this function for display untrusted content. 
-Please use `text` insted of this function.
+Please use `text` instead of this function.
 
 ## true / false
 
 This functions makes instance of `Text::HyperScript::Boolean` value.
 
-Instance of `Text::HyperScript::Boolean` has two method as `is_true` and `is_false`,
-these method returns that value pointed `true` ot `false`.
+Instance of `Text::HyperScript::Boolean` has two method like as `is_true` and `is_false`,
+these method returns that value pointed `true` or `false` values.
 
 Usage of these functions for make html5 value-less attribute.
 

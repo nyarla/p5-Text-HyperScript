@@ -239,7 +239,7 @@ Attributes of element.
 
 Result of attributes sorted by alphabetical according.
 
-You could pass to multiple theses types as attribute values:
+You could pass to theses types as attribute values:
 
 =over
 
@@ -293,7 +293,7 @@ You could pass to these types:
 
 Plain text as content.
 
-This value always applied html/xml escape by L<HTML::Escape::escape_html>.
+This value always applied html/xml escape by L<HTML::Escape#escape_html>.
 
 =item C<Text::HyperScript::Element>
 
@@ -322,14 +322,14 @@ that return text with html/xml markup.
 
 The value of C<Text::HyperScript::Element> is not escaped by L<HTML::Escape::escape_html>,
 you should not use this function for display untrusted content. 
-Please use C<text> insted of this function.
+Please use C<text> instead of this function.
 
 =head2 true / false
 
 This functions makes instance of C<Text::HyperScript::Boolean> value.
 
-Instance of C<Text::HyperScript::Boolean> has two method as C<is_true> and C<is_false>,
-these method returns that value pointed C<true> ot C<false>.
+Instance of C<Text::HyperScript::Boolean> has two method like as C<is_true> and C<is_false>,
+these method returns that value pointed C<true> or C<false> values.
 
 Usage of these functions for make html5 value-less attribute.
 
