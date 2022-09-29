@@ -31,8 +31,6 @@ sub text {
     return HTML::Escape::escape_html($text);
 }
 
-1;
-
 package Text::HyperScript::HTML;
 
 use overload q("") => \&html;
