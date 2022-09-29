@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test2::V0;
-use Text::HyperScript qw(h raw);
+use Text::HyperScript qw(h raw true);
 
 sub main {
 
@@ -24,12 +24,15 @@ sub main {
     is( h( 'hr', { "<foo>" => "<bar>" } ),                '<hr &lt;foo&gt;="&lt;bar&gt;" />', 'tag with attribute but need escape' );
     is( h( 'hr', { "<foo>" => ["<bar>"] } ),              '<hr &lt;foo&gt;="&lt;bar&gt;" />', 'tag with multiple attributes but need escape' );
 
+    is( h( 'script', { crossorigin => true }, '' ), '<script crossorigin></script>', 'tag with value-less attribute' );
+
     # tag with prefixed attribute
     is( h( "hr", { data => { id     => 'id' } } ),                   '<hr data-id="id" />',                    'tag with prefixed attribute' );
     is( h( "hr", { data => { id     => 'id', class => 'class' } } ), '<hr data-class="class" data-id="id" />', 'tag with prefixed attribute' );
     is( h( 'hr', { data => { key    => [qw(foo bar baz)] } } ), '<hr data-key="bar baz foo" />', 'tag with multiple prefixed attribute values by array ref' );
     is( h( "hr", { data => { "<id>" => '<id>' } } ),   '<hr data-&lt;id&gt;="&lt;id&gt;" />',    'tag with prefixed attribute but need escape' );
     is( h( "hr", { data => { "<id>" => ['<id>'] } } ), '<hr data-&lt;id&gt;="&lt;id&gt;" />',    'tag with prefixed attribute by array ref but need escape' );
+    is( h( 'hr', { data => { key    => true } } ),     '<hr data-key />',                        'tag with value-less attribute' );
 
     # example
     is(

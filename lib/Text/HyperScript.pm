@@ -69,7 +69,8 @@ sub h {
             next;
         }
 
-        if ( ref $data eq 'Text::HyperScript::Boolean' && $data->is_ture ) {
+        if ( ref $data eq 'Text::HyperScript::Boolean' && $data->is_true ) {
+            $attrs .= " ";
             $attrs .= HTML::Escape::escape_html($prefix);
 
             next;
@@ -91,7 +92,7 @@ sub h {
                     next PREFIX;
                 }
 
-                if ( ref $value eq 'Text::HyperScript::Boolean' && $value->is_ture ) {
+                if ( ref $value eq 'Text::HyperScript::Boolean' && $value->is_true ) {
                     $attrs .= " ";
                     $attrs .= $key;
 
