@@ -176,7 +176,7 @@ package Text::HyperScript;
 
 =head1 NAME
 
-Text::HyperScript - The HyperScript library for Perl.
+Text::HyperScript - The HyperScript like library for Perl.
 
 =head1 SYNOPSIS
 
@@ -208,18 +208,22 @@ Text::HyperScript - The HyperScript library for Perl.
 
 =head1 DESCRIPTION
 
-This library is a implementation of HTML generator like as hyperscirpt.
+This module is a html/xml like string generator like as hyperscirpt.
 
-This library name contains B<HyperScript>,
-but library features different of another language or original implementation.
+The name of this module contains B<HyperScript>,
+but this module features isn't same of another language or original implementation.
 
 =head1 FUNCTIONS
 
 =head2 h
 
-This function makes html text by perl code. This function is complex. but it's powerful.
+This function makes html/xml text by perl code. 
+
+This function is complex. but it's powerful.
 
 B<Arguments>:
+
+    h($tag, [ \%attrs, $content, ...])
 
 =over
 
@@ -233,43 +237,47 @@ This value should be C<Str> value.
 
 Attributes of element.
 
-You can pass to these values as attribute value:
+Result of attributes sorted by alphabetical according.
+
+You could pass to multiple theses types as attribute values:
 
 =over
 
 =item C<Str>
 
-If passed to this value, attr value is C<Str> value.
+If you passed to this type, attribute value became a C<Str> value.
+
+For example:
+
+    h('hr', { id => 'id' }); # => '<hr id="id" />'
 
 =item C<Text::HyperScript::Boolean>
 
-If passed to this value, attrribute became a value-less attribute.
+If you passed to this type, attribute value became a value-less attribute.
 
-For example, if you call this function like as:
+For example:
 
-    h('script' => {crossorigin => true}, '') # `true` return Text::HyperScript::Boolean value.
-
-You could get this result:
-
-    '<script crossorigin></script>'
+    # `true()` returns Text::HyperScript::Boolean value as !!1 (true)
+    h('script', { classorigin => true }); # => '<script crossorigin></script>'
 
 =item C<ArrayRef[Str]>
 
-If passed to this value, attribute has B<sorted> and delimited by whitespace C<Str>. 
+If you passed to this type, attribute value became a B<sorted> (alphabetical according),
+delimited by whitespace C<Str> value,
 
-=item C<HashRef[ Str | Text::HyperScript::Boolean | ArrayRef[Str] ]>
+For example:
 
-If passed to this value, attribute has B<prefixed> values.
+    h('hr', { class => [qw( foo bar baz )] });
+    # => '<hr class="bar baz foo">'
 
-This feature is shorthand for C<data> or C<aria> properties.
+=item C<HashRef[ Str | ArrayRef[Str] | Text::HyperScript::Boolean ]>
 
-For Example:
+This type is a shorthand of prefixed attributes.
 
-    h('hr', { data => { key => 'id', enabled => true, flags => [qw(foo bar)]  } })
+For example:
 
-Result is:
-
-    '<hr data-enabled data-flags="bar foo" data-key="id" />'
+    h('hr', { data => { id => 'foo', flags => [qw(bar baz)], enabled => true } });
+    # => '<hr data-enabled data-flags="bar baz" data-id="foo" />'
 
 =back
 
@@ -277,21 +285,22 @@ Result is:
 
 Contents of element.
 
-You can pass to these values:
+You could pass to these types:
 
 =over
 
 =item C<Str>
 
-Text value of content.
+Plain text as content.
 
-B<This value apply html escape by automatic>.
+This value always applied html/xml escape by L<HTML::Escape::escape_html>.
 
-=item C<Text::HyperScript::HTML>.
+=item C<Text::HyperScript::Element>
 
-HTML value of content.
+Raw html/xml string as content.
 
-B<This value is raw string of HTML>.
+B<This value does not applied html/xml escape>,
+B<you should not use this type for untrusted text>.
 
 =back
 
@@ -299,67 +308,58 @@ B<This value is raw string of HTML>.
 
 =head2 text
 
-This function return B<escaped html> string.
+This function returns a html/xml escaped text.
 
-This is useful for display text content from untrusted content,
-Or contian special characters of html.
+If you use untrusted stirng for display,
+you should use this function for wrapping untrusted content.
 
 =head2 raw
 
-This function return raw html instance of C<Text::HyperScript::HTML>.
+This function makes a instance of C<Text::HyperScript::Element>.
 
-B<Return value does not auto escape of html>.
+Instance of C<Text::HyperScript::Element> has C<markup> method,
+that return text with html/xml markup.
 
-This function has risk of XSS or other script injection. Please be careful.
+The value of C<Text::HyperScript::Element> is not escaped by L<HTML::Escape::escape_html>,
+you should not use this function for display untrusted content. 
+Please use C<text> insted of this function.
 
 =head2 true / false
 
-This functions return blessed boolean value of C<Text::HyperScript::Boolean>.
+This functions makes instance of C<Text::HyperScript::Boolean> value.
 
-C<Text::HyperScript::Boolean> has two methods:
+Instance of C<Text::HyperScript::Boolean> has two method as C<is_true> and C<is_false>,
+these method returns that value pointed C<true> ot C<false>.
 
-=over
+Usage of these functions for make html5 value-less attribute.
 
-=item is_true : Bool
+For example:
 
-If boolean value pointed to true value, this method return true.
-Otherwise return false.
+    h('script', { crossorigin => true }); # => '<script crossorigin></script>'
 
-=item is_false : Bool
+=head1 QUESTION AND ANSWERS
 
-If boolean value pointed to false value, this method return true.
-Otherwise return false.
+=head2 How do I get element of empty content like as `script`?
 
-=back
+This case you chould gets element string by pass to empty string.
 
-This function values uses for html5 boolean attributes.
+For example:
 
-For exmaple:
+    h('script', ''); # <script></script>
 
-  my $script = h('script', { crossorigin => true }, '...') # return <script crossorigin>...</script> 
+=head2 Why all attributes and attribute values sorted by alphabetical according?
 
-=head1 NOTE
-
-=head2 you should pass empty string to C<h> function if you want content blank element like as C<script>
-
-If you want to get element of content is blank, you should call C<h> function like as:
-
-    h('scirpt', '') # => '<script></script>'
-
-=head2 all attributes and values are sorted by alphabetical accordion
-
-This feature made that gets always same results of hyperscripted text,
-Because perl's sort of hash keys always randomized.
+This reason that gets same result on randomized orderd hash keys. 
 
 =head1 LICENSE
 
-Copyright (C) OKAMURA Naoki aka nyarla.
+Copyright (C) OKAMURA Naoki a.k.a nyarla.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-OKAMURA Naoki aka nyarla: E<lt>nyarla@kalaclista.comE<gt>
+OKAMURA Naoki a.k.a nyarla: E<lt>nyarla@kalaclista.comE<gt>
 
 =cut

@@ -1,7 +1,7 @@
 [![Actions Status](https://github.com/nyarla/p5-Text-HyperScript/actions/workflows/test.yml/badge.svg)](https://github.com/nyarla/p5-Text-HyperScript/actions)
 # NAME
 
-Text::HyperScript - The HyperScript library for Perl.
+Text::HyperScript - The HyperScript like library for Perl.
 
 # SYNOPSIS
 
@@ -33,18 +33,22 @@ Text::HyperScript - The HyperScript library for Perl.
 
 # DESCRIPTION
 
-This library is a implementation of HTML generator like as hyperscirpt.
+This module is a html/xml like string generator like as hyperscirpt.
 
-This library name contains **HyperScript**,
-but library features different of another language or original implementation.
+The name of this module contains **HyperScript**,
+but this module features isn't same of another language or original implementation.
 
 # FUNCTIONS
 
 ## h
 
-This function makes html text by perl code. This function is complex. but it's powerful.
+This function makes html/xml text by perl code. 
+
+This function is complex. but it's powerful.
 
 **Arguments**:
+
+    h($tag, [ \%attrs, $content, ...])
 
 - `$tag`
 
@@ -56,117 +60,117 @@ This function makes html text by perl code. This function is complex. but it's p
 
     Attributes of element.
 
-    You can pass to these values as attribute value:
+    Result of attributes sorted by alphabetical according.
+
+    You could pass to multiple theses types as attribute values:
 
     - `Str`
 
-        If passed to this value, attr value is `Str` value.
+        If you passed to this type, attribute value became a `Str` value.
+
+        For example:
+
+            h('hr', { id => 'id' }); # => '<hr id="id" />'
 
     - `Text::HyperScript::Boolean`
 
-        If passed to this value, attrribute became a value-less attribute.
+        If you passed to this type, attribute value became a value-less attribute.
 
-        For example, if you call this function like as:
+        For example:
 
-            h('script' => {crossorigin => true}, '') # `true` return Text::HyperScript::Boolean value.
-
-        You could get this result:
-
-            '<script crossorigin></script>'
+            # `true()` returns Text::HyperScript::Boolean value as !!1 (true)
+            h('script', { classorigin => true }); # => '<script crossorigin></script>'
 
     - `ArrayRef[Str]`
 
-        If passed to this value, attribute has **sorted** and delimited by whitespace `Str`. 
+        If you passed to this type, attribute value became a **sorted** (alphabetical according),
+        delimited by whitespace `Str` value,
 
-    - `HashRef[ Str | Text::HyperScript::Boolean | ArrayRef[Str] ]`
+        For example:
 
-        If passed to this value, attribute has **prefixed** values.
+            h('hr', { class => [qw( foo bar baz )] });
+            # => '<hr class="bar baz foo">'
 
-        This feature is shorthand for `data` or `aria` properties.
+    - `HashRef[ Str | ArrayRef[Str] | Text::HyperScript::Boolean ]`
 
-        For Example:
+        This type is a shorthand of prefixed attributes.
 
-            h('hr', { data => { key => 'id', enabled => true, flags => [qw(foo bar)]  } })
+        For example:
 
-        Result is:
-
-            '<hr data-enabled data-flags="bar foo" data-key="id" />'
+            h('hr', { data => { id => 'foo', flags => [qw(bar baz)], enabled => true } });
+            # => '<hr data-enabled data-flags="bar baz" data-id="foo" />'
 
 - `$contnet`
 
     Contents of element.
 
-    You can pass to these values:
+    You could pass to these types:
 
     - `Str`
 
-        Text value of content.
+        Plain text as content.
 
-        **This value apply html escape by automatic**.
+        This value always applied html/xml escape by [HTML::Escape::escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%3A%3Aescape_html).
 
-    - `Text::HyperScript::HTML`.
+    - `Text::HyperScript::Element`
 
-        HTML value of content.
+        Raw html/xml string as content.
 
-        **This value is raw string of HTML**.
+        **This value does not applied html/xml escape**,
+        **you should not use this type for untrusted text**.
 
 ## text
 
-This function return **escaped html** string.
+This function returns a html/xml escaped text.
 
-This is useful for display text content from untrusted content,
-Or contian special characters of html.
+If you use untrusted stirng for display,
+you should use this function for wrapping untrusted content.
 
 ## raw
 
-This function return raw html instance of `Text::HyperScript::HTML`.
+This function makes a instance of `Text::HyperScript::Element`.
 
-**Return value does not auto escape of html**.
+Instance of `Text::HyperScript::Element` has `markup` method,
+that return text with html/xml markup.
 
-This function has risk of XSS or other script injection. Please be careful.
+The value of `Text::HyperScript::Element` is not escaped by [HTML::Escape::escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%3A%3Aescape_html),
+you should not use this function for display untrusted content. 
+Please use `text` insted of this function.
 
 ## true / false
 
-This functions return blessed boolean value of `Text::HyperScript::Boolean`.
+This functions makes instance of `Text::HyperScript::Boolean` value.
 
-`Text::HyperScript::Boolean` has two methods:
+Instance of `Text::HyperScript::Boolean` has two method as `is_true` and `is_false`,
+these method returns that value pointed `true` ot `false`.
 
-- is\_true : Bool
+Usage of these functions for make html5 value-less attribute.
 
-    If boolean value pointed to true value, this method return true.
-    Otherwise return false.
+For example:
 
-- is\_false : Bool
+    h('script', { crossorigin => true }); # => '<script crossorigin></script>'
 
-    If boolean value pointed to false value, this method return true.
-    Otherwise return false.
+# QUESTION AND ANSWERS
 
-This function values uses for html5 boolean attributes.
+## How do I get element of empty content like as \`script\`?
 
-For exmaple:
+This case you chould gets element string by pass to empty string.
 
-    my $script = h('script', { crossorigin => true }, '...') # return <script crossorigin>...</script> 
+For example:
 
-# NOTE
+    h('script', ''); # <script></script>
 
-## you should pass empty string to `h` function if you want content blank element like as `script`
+## Why all attributes and attribute values sorted by alphabetical according?
 
-If you want to get element of content is blank, you should call `h` function like as:
-
-    h('scirpt', '') # => '<script></script>'
-
-## all attributes and values are sorted by alphabetical accordion
-
-This feature made that gets always same results of hyperscripted text,
-Because perl's sort of hash keys always randomized.
+This reason that gets same result on randomized orderd hash keys. 
 
 # LICENSE
 
-Copyright (C) OKAMURA Naoki aka nyarla.
+Copyright (C) OKAMURA Naoki a.k.a nyarla.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 # AUTHOR
 
-OKAMURA Naoki aka nyarla: <nyarla@kalaclista.com>
+OKAMURA Naoki a.k.a nyarla: <nyarla@kalaclista.com>
