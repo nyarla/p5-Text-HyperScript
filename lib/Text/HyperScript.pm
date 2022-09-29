@@ -179,13 +179,122 @@ Text::HyperScript - The HyperScript library for Perl.
 
 =head1 SYNOPSIS
 
-    # TODO
+    use feature qw(say);
+    use Text::HyperScript qw(h true);
+
+    # tag only
+    say h('hr');          # => '<hr />'
+    say h(script => q{}); # => '<script></script>'
+
+    # tag with content
+    say h('p', 'hi,');    # => '<p>hi,</p>'
+    say h('p', ['hi,']);  # => '<p>hi,</p>'
+
+    say h('p', 'hi', h('b', ['anonymous']));  # => '<p>hi,<b>anonymous</b></p>'
+    say h('p', 'foo', ['bar'], 'baz');        # => '<p>foobarbarz</p>'
+
+    # tag with attributes
+    say h('hr', { id => 'foo' });                     # => '<hr id="foo" />'
+    say h('hr', { id => 'foo', class => 'bar'});      # => '<hr class="bar" id="foo">'
+    say h('hr', { class => ['foo', 'bar', 'baz'] });  # => '<hr class="bar baz foo">' 
+
+    # tag with prefixed attributes
+    say h('hr', { data => { foo => 'bar' } });              # => '<hr data-foo="bar">'
+    say h('hr', { data => { foo => [qw(foo bar baz)] } });  # => '<hr data-foo="bar baz foo">'
+
+    # tag with value-less attribute
+    say h('script', { crossorigin => true }, ""); # <script crossorigin></script>
 
 =head1 DESCRIPTION
 
-TODO
+This library is a implementation of HTML generator like as hyperscirpt.
+
+This library name contains B<HyperScript>,
+but library features different of another language or original implementation.
 
 =head1 FUNCTIONS
+
+=head2 h
+
+This function makes html text by perl code. This function is complex. but it's powerful.
+
+B<Arguments>:
+
+=over
+
+=item C<$tag>
+
+Tag name of element.
+
+This value should be C<Str> value.
+
+=item C<\%attrs> 
+
+Attributes of element.
+
+You can pass to these values as attribute value:
+
+=over
+
+=item C<Str>
+
+If passed to this value, attr value is C<Str> value.
+
+=item C<Text::HyperScript::Boolean>
+
+If passed to this value, attrribute became a value-less attribute.
+
+For example, if you call this function like as:
+
+    h('script' => {crossorigin => true}, '') # `true` return Text::HyperScript::Boolean value.
+
+You could get this result:
+
+    '<script crossorigin></script>'
+
+=item C<ArrayRef[Str]>
+
+If passed to this value, attribute has B<sorted> and delimited by whitespace C<Str>. 
+
+=item C<HashRef[ Str | Text::HyperScript::Boolean | ArrayRef[Str] ]>
+
+If passed to this value, attribute has B<prefixed> values.
+
+This feature is shorthand for C<data> or C<aria> properties.
+
+For Example:
+
+    h('hr', { data => { key => 'id', enabled => true, flags => [qw(foo bar)]  } })
+
+Result is:
+
+    '<hr data-enabled data-flags="bar foo" data-key="id" />'
+
+=back
+
+=item C<$contnet>
+
+Contents of element.
+
+You can pass to these values:
+
+=over
+
+=item C<Str>
+
+Text value of content.
+
+B<This value apply html escape by automatic>.
+
+=item C<Text::HyperScript::HTML>.
+
+HTML value of content.
+
+B<This value is raw string of HTML>.
+
+=back
+
+=back
 
 =head2 text
 
@@ -210,7 +319,7 @@ C<Text::HyperScript::Boolean> has two methods:
 
 =over
 
-=item is_ture : Bool
+=item is_true : Bool
 
 If boolean value pointed to true value, this method return true.
 Otherwise return false.
@@ -228,6 +337,19 @@ For exmaple:
 
   my $script = h('script', { crossorigin => true }, '...') # return <script crossorigin>...</script> 
 
+=head1 NOTE
+
+=head2 you should pass empty string to C<h> function if you want content blank element like as C<script>
+
+If you want to get element of content is blank, you should call C<h> function like as:
+
+    h('scirpt', '') # => '<script></script>'
+
+=head2 all attributes and values are sorted by alphabetical accordion
+
+This feature made that gets always same results of hyperscripted text,
+Because perl's sort of hash keys always randomized.
+
 =head1 LICENSE
 
 Copyright (C) nyarla.
@@ -237,6 +359,6 @@ it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-nyarla E<lt>nyarla@kalaclista.comE<gt>
+OKAMURA Naoki aka E<lt>nyarla@kalaclista.comE<gt>
 
 =cut
