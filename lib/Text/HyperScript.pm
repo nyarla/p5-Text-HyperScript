@@ -201,6 +201,10 @@ This module is a html/xml string generator like as hyperscirpt.
 The name of this module contains B<HyperScript>,
 but this module features isn't same of another language or original implementation.
 
+This module has submodule for some tagset:
+
+HTML5: L<Text::HyperScript::HTML5>
+
 =head1 FUNCTIONS
 
 =head2 h
@@ -355,5 +359,9 @@ it under the same terms as Perl itself.
 =head1 AUTHOR
 
 OKAMURA Naoki a.k.a nyarla: E<lt>nyarla@kalaclista.comE<gt>
+
+=head1 SEE ALSO
+
+L<Text::HyperScript::HTML5>
 
 =cut
