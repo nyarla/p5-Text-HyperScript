@@ -2,6 +2,11 @@ Revision history for Perl extension Text-HyperScript
 
 {{$NEXT}}
 
+0.03 2022-09-30T01:51:22Z
+
+    - Add Text::HyperScript::HTML5 tagset module
+    - Fix typo in Text::HyperScript's POD
+
 0.02 2022-09-29T14:00:07Z
 
     - Rename Text::HyperScript::HTML to Text::HyperScript::Element
