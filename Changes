@@ -2,10 +2,15 @@ Revision history for Perl extension Text-HyperScript
 
 {{$NEXT}}
 
+0.05 2022-09-30T10:33:39Z
+
+    - Fix conflict with builtin name of perl on Text::HyperScript::HTML5
+    - Add Text::HyperScript::HTML5 link to Text::HyperScript document
+
 0.04 2022-09-30T05:22:37Z
 
     - First release on CPAN
-    - Optmize Text::HyperScript::h function
+    - Optimize Text::HyperScript::h function
 
 0.03 2022-09-30T01:51:22Z
 

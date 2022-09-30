@@ -38,6 +38,10 @@ This module is a html/xml string generator like as hyperscirpt.
 The name of this module contains **HyperScript**,
 but this module features isn't same of another language or original implementation.
 
+This module has submodule for some tagset:
+
+HTML5: [Text::HyperScript::HTML5](https://metacpan.org/pod/Text%3A%3AHyperScript%3A%3AHTML5)
+
 # FUNCTIONS
 
 ## h
@@ -180,3 +184,7 @@ it under the same terms as Perl itself.
 # AUTHOR
 
 OKAMURA Naoki a.k.a nyarla: <nyarla@kalaclista.com>
+
+# SEE ALSO
+
+[Text::HyperScript::HTML5](https://metacpan.org/pod/Text%3A%3AHyperScript%3A%3AHTML5)
