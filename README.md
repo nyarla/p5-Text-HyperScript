@@ -33,7 +33,7 @@ Text::HyperScript - The HyperScript like library for Perl.
 
 # DESCRIPTION
 
-This module is a html/xml like string generator like as hyperscirpt.
+This module is a html/xml string generator like as hyperscirpt.
 
 The name of this module contains **HyperScript**,
 but this module features isn't same of another language or original implementation.
@@ -154,7 +154,7 @@ Usage of these functions for make html5 value-less attribute.
 
 For example:
 
-    h('script', { crossorigin => true }); # => '<script crossorigin></script>'
+    h('script', { crossorigin => true }, ''); # => '<script crossorigin></script>'
 
 # QUESTION AND ANSWERS
 

@@ -7,13 +7,12 @@ package Text::HyperScript;
 our $VERSION = "0.03";
 
 use Exporter::Lite;
-use HTML::Escape ();
 
 our @EXPORT = qw(raw true false text h);
 
 sub raw {
-    my $html = shift;
-    return Text::HyperScript::Element->new($html);
+    my $html = $_[0];
+    return bless \$html, 'Text::HyperScript::Element';
 }
 
 sub true {
@@ -26,20 +25,36 @@ sub false {
     return bless \$false, 'Text::HyperScript::Boolean';
 }
 
+# copied from HTML::Escape::PurePerl
+my %escape = (
+    '&'  => '&amp;',
+    '>'  => '&gt;',
+    '<'  => '&lt;',
+    q{"} => '&quot;',
+    q{'} => '&#39;',
+    q{`} => '&#96;',
+    '{'  => '&#123;',
+    '}'  => '&#125;',
+);
+
 sub text {
-    my $text = shift;
-    return HTML::Escape::escape_html($text);
+    my ($src) = @_;
+    $src =~ s/([&><"'`{}])/$escape{$1}/ge;
+    return $src;
 }
 
+my %cache;
+
 sub h {
-    my $tag = HTML::Escape::escape_html(shift);
+    my $tag  = text(shift);
+    my $html = qq(<${tag});
 
     my %attrs;
     my @contents;
 
     for my $data (@_) {
         if ( ref $data eq 'Text::HyperScript::Element' ) {
-            push @contents, $data->markup;
+            push @contents, ${$data};
             next;
         }
 
@@ -56,22 +71,16 @@ sub h {
         push @contents, text($data);
     }
 
-    my $attrs = q{};
     for my $prefix ( sort keys %attrs ) {
         my $data = $attrs{$prefix};
         if ( !ref $data ) {
-            $attrs .= q{ };
-            $attrs .= HTML::Escape::escape_html($prefix);
-            $attrs .= q{="};
-            $attrs .= HTML::Escape::escape_html($data);
-            $attrs .= q{"};
+            $html .= q{ } . text($prefix) . q{="} . text($data) . q{"};
 
             next;
         }
 
-        if ( ref $data eq 'Text::HyperScript::Boolean' && $data->is_true ) {
-            $attrs .= " ";
-            $attrs .= HTML::Escape::escape_html($prefix);
+        if ( ref $data eq 'Text::HyperScript::Boolean' && ${$data} ) {
+            $html .= " " . text($prefix);
 
             next;
         }
@@ -79,68 +88,49 @@ sub h {
         if ( ref $data eq 'HASH' ) {
         PREFIX:
             for my $suffix ( sort keys %{$data} ) {
-                my $key   = HTML::Escape::escape_html($prefix) . '-' . HTML::Escape::escape_html($suffix);
+                my $key   = text($prefix) . '-' . text($suffix);
                 my $value = $data->{$suffix};
 
                 if ( !ref $value ) {
-                    $attrs .= " ";
-                    $attrs .= $key;
-                    $attrs .= q{="};
-                    $attrs .= HTML::Escape::escape_html($value);
-                    $attrs .= q{"};
+                    $html .= qq( ${key}=") . text($value) . qq(");
 
                     next PREFIX;
                 }
 
-                if ( ref $value eq 'Text::HyperScript::Boolean' && $value->is_true ) {
-                    $attrs .= " ";
-                    $attrs .= $key;
+                if ( ref $value eq 'Text::HyperScript::Boolean' && ${$value} ) {
+                    $html .= qq( ${key});
 
                     next PREFIX;
                 }
 
                 if ( ref $value eq 'ARRAY' ) {
-                    $attrs .= q{ };
-                    $attrs .= $key;
-                    $attrs .= q{="};
-                    $attrs .= join q{ }, map { HTML::Escape::escape_html($_) } sort @{$value};
-                    $attrs .= q{"};
+                    $html .= qq( ${key}=") . ( join q{ }, map { text($_) } sort @{$value} ) . qq(");
 
                     next PREFIX;
                 }
 
-                $attrs .= " ";
-                $attrs .= $key;
-                $attrs .= q{="};
-                $attrs .= HTML::Escape::escape_html($value);
-                $attrs .= q{"};
+                $html .= qq( ${key}=") . text($value) . qq(");
             }
 
             next;
         }
 
         if ( ref $data eq 'ARRAY' ) {
-            $attrs .= q{ };
-            $attrs .= HTML::Escape::escape_html($prefix);
-            $attrs .= q{="};
-            $attrs .= join q{ }, map { HTML::Escape::escape_html($_) } sort @{$data};
-            $attrs .= q{"};
+            $html .= q( ) . text($prefix) . q(=") . ( join q{ }, map { text($_) } sort @{$data} ) . q(");
 
             next;
         }
 
-        $attrs .= q{ };
-        $attrs .= HTML::Escape::escape_html($prefix);
-        $attrs .= q{="};
-        $attrs .= HTML::Escape::escape_html($data);
-        $attrs .= q{"};
+        $html .= q{ } . text($prefix) . q(=") . text($data) . q(");
     }
 
     if ( @contents == 0 ) {
-        return Text::HyperScript::Element->new(qq(<${tag}${attrs} />));
+        $html .= " />";
+        return bless \$html, 'Text::HyperScript::Element';
     }
 
-    return Text::HyperScript::Element->new( qq(<${tag}${attrs}>) . ( join q{}, @contents ) . qq(</${tag}>) );
+    $html .= q(>) . join( q{}, @contents ) . qq(</${tag}>);
+    return bless \$html, 'Text::HyperScript::Element';
 }
 
 package Text::HyperScript::Element;
@@ -208,7 +198,7 @@ Text::HyperScript - The HyperScript like library for Perl.
 
 =head1 DESCRIPTION
 
-This module is a html/xml like string generator like as hyperscirpt.
+This module is a html/xml string generator like as hyperscirpt.
 
 The name of this module contains B<HyperScript>,
 but this module features isn't same of another language or original implementation.
@@ -341,7 +331,7 @@ Usage of these functions for make html5 value-less attribute.
 
 For example:
 
-    h('script', { crossorigin => true }); # => '<script crossorigin></script>'
+    h('script', { crossorigin => true }, ''); # => '<script crossorigin></script>'
 
 =head1 QUESTION AND ANSWERS
 
