@@ -43,8 +43,6 @@ sub text {
     return $src;
 }
 
-my %cache;
-
 sub h {
     my $tag  = text(shift);
     my $html = qq(<${tag});
