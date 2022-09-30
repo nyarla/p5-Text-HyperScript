@@ -79,7 +79,7 @@ This function is complex. but it's powerful.
         For example:
 
             # `true()` returns Text::HyperScript::Boolean value as !!1 (true)
-            h('script', { classorigin => true }); # => '<script crossorigin></script>'
+            h('script', { crossorigin => true }); # => '<script crossorigin></script>'
 
     - `ArrayRef[Str]`
 
@@ -118,6 +118,12 @@ This function is complex. but it's powerful.
 
         **This value does not applied html/xml escape**,
         **you should not use this type for untrusted text**.
+
+    - `ArrayRef[ Str | Text::HyperScript::Element ]`
+
+        The ArrayRef of `$content`.
+
+        This type value is flatten of other `$content` value.
 
 ## text
 

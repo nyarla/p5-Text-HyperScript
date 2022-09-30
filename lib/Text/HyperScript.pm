@@ -258,7 +258,7 @@ If you passed to this type, attribute value became a value-less attribute.
 For example:
 
     # `true()` returns Text::HyperScript::Boolean value as !!1 (true)
-    h('script', { classorigin => true }); # => '<script crossorigin></script>'
+    h('script', { crossorigin => true }); # => '<script crossorigin></script>'
 
 =item C<ArrayRef[Str]>
 
@@ -301,6 +301,12 @@ Raw html/xml string as content.
 
 B<This value does not applied html/xml escape>,
 B<you should not use this type for untrusted text>.
+
+=item C<ArrayRef[ Str | Text::HyperScript::Element ]>
+
+The ArrayRef of C<$content>.
+
+This type value is flatten of other C<$content> value.
 
 =back
 
