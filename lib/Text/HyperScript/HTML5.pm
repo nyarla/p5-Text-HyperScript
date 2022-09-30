@@ -28,10 +28,10 @@ BEGIN {
         hr li menu ol p pre ul
 
         a abbr b bdi bdo br cite code data em
-        i kbd mark q rp rt ruby s samp small
-        span strong sub sup time_ u var wbr
+        i kbd mark q_ rp rt ruby s_ samp small
+        span strong sub_ sup time_ u var wbr
 
-        area audio img map track video
+        area audio img map_ track video
 
         embed iframe object picture portal source
 
@@ -42,7 +42,7 @@ BEGIN {
         del ins
 
         caption col colgroup table tbody td tfoot
-        th thead tr
+        th thead tr_
 
         buttom datalist fieldset form input
         label legend meter optgroup option
@@ -83,9 +83,10 @@ Text::HyperScript::HTML5 - The html5 tagset for L<Text::HyperScript>.
 
 =head1 SUPPORTED TAGS
 
+
     html
 
-    base head link meta style title
+    base head link_ meta style title
 
     body
 
@@ -96,10 +97,10 @@ Text::HyperScript::HTML5 - The html5 tagset for L<Text::HyperScript>.
     hr li menu ol p pre ul
 
     a abbr b bdi bdo br cite code data em
-    i kbd mark q rp rt ruby s samp small
-    span strong sub sup time_ u var wbr
+    i kbd mark q_ rp rt ruby s_ samp small
+    span strong sub_ sup time_ u var wbr
 
-    area audio img map track video
+    area audio img map_ track video
 
     embed iframe object picture portal source
 
@@ -110,7 +111,7 @@ Text::HyperScript::HTML5 - The html5 tagset for L<Text::HyperScript>.
     del ins
 
     caption col colgroup table tbody td tfoot
-    th thead tr
+    th thead tr_
 
     buttom datalist fieldset form input
     label legend meter optgroup option
@@ -119,6 +120,7 @@ Text::HyperScript::HTML5 - The html5 tagset for L<Text::HyperScript>.
     details dialog summary
 
     slot template
+
 
 =head1 GLOBAL VARIABLES
 
