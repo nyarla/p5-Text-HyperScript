@@ -285,7 +285,7 @@ You could pass to these types:
 
 Plain text as content.
 
-This value always applied html/xml escape by L<HTML::Escape#escape_html>.
+This value always applied html/xml escape.
 
 =item C<Text::HyperScript::Element>
 
@@ -318,7 +318,7 @@ This function makes a instance of C<Text::HyperScript::Element>.
 Instance of C<Text::HyperScript::Element> has C<markup> method,
 that return text with html/xml markup.
 
-The value of C<Text::HyperScript::Element> is not escaped by L<HTML::Escape::escape_html>,
+The value of C<Text::HyperScript::Element> always does not escaped,
 you should not use this function for display untrusted content. 
 Please use C<text> instead of this function.
 

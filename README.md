@@ -114,7 +114,7 @@ This function is complex. but it's powerful.
 
         Plain text as content.
 
-        This value always applied html/xml escape by [HTML::Escape#escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%23escape_html).
+        This value always applied html/xml escape.
 
     - `Text::HyperScript::Element`
 
@@ -143,7 +143,7 @@ This function makes a instance of `Text::HyperScript::Element`.
 Instance of `Text::HyperScript::Element` has `markup` method,
 that return text with html/xml markup.
 
-The value of `Text::HyperScript::Element` is not escaped by [HTML::Escape::escape\_html](https://metacpan.org/pod/HTML%3A%3AEscape%3A%3Aescape_html),
+The value of `Text::HyperScript::Element` always does not escaped,
 you should not use this function for display untrusted content. 
 Please use `text` instead of this function.
 
