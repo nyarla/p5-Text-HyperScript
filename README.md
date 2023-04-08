@@ -116,14 +116,14 @@ This function is complex. but it's powerful.
 
         This value always applied html/xml escape.
 
-    - `Text::HyperScript::Element`
+    - `Text::HyperScript::NodeString`
 
         Raw html/xml string as content.
 
         **This value does not applied html/xml escape**,
         **you should not use this type for untrusted text**.
 
-    - `ArrayRef[ Str | Text::HyperScript::Element ]`
+    - `ArrayRef[ Str | Text::HyperScript::NodeString ]`
 
         The ArrayRef of `$content`.
 
@@ -138,12 +138,12 @@ you should use this function for wrapping untrusted content.
 
 ## raw
 
-This function makes a instance of `Text::HyperScript::Element`.
+This function makes a instance of `Text::HyperScript::NodeString`.
 
-Instance of `Text::HyperScript::Element` has `markup` method,
+Instance of `Text::HyperScript::NodeString` has `to_string` method,
 that return text with html/xml markup.
 
-The value of `Text::HyperScript::Element` always does not escaped,
+The value of `Text::HyperScript::NodeString` always does not escaped,
 you should not use this function for display untrusted content. 
 Please use `text` instead of this function.
 
