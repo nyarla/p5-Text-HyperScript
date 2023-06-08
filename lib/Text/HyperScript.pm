@@ -196,12 +196,65 @@ Text::HyperScript - The HyperScript like library for Perl.
 
 =head1 DESCRIPTION
 
-This module is a html/xml string generator like as hyperscirpt.
+This module is a html/xml tags generator like as hyperscript-ish style.
 
-The name of this module contains B<HyperScript>,
-but this module features isn't same of another language or original implementation.
+=head1 FEATURES
 
-This module has submodule for some tagset:
+=over
+
+=item All html or xml tags write as perl code!
+
+We're able to write html/xml templates witout raw syntax.
+
+=item Generates XSS safe html or xml tags
+
+This module generates XSS safe html/xml tags by default.
+
+Like this:
+
+    use feature qw(say);
+    
+    say h('p', 'hello, <script>alert("XSS!")</script>')
+    # => <p>hello, &lt;scrip&gt;alert("XSS!")&lt;/script&gt;</p>
+
+=item Shorthand included for multiple class name and data or aria prefixed attributes
+
+This module has shorthand multiple class name, and data, aria or others prefixed attributes.
+
+For examples:
+
+    use feature qw(say);
+    
+    say h('h1', { class => [qw/ C B A /] }, 'msg');
+    # => <h1 class="A B C">msg</h1>
+    
+    say h('button', { data => { click => '1' } }, 'label');
+    # => <button data-click="1">label</button>
+    
+    say h('a', { href => '#', aria => {label => 'label' } }, 'link');
+    # => <a aria-label="label" href="#">link</a>
+
+=item Enable to generate empty and empty content tags
+
+This module supports empty element and empty content tags.
+
+Like that:
+
+    use feature qw(say);
+    
+    say h('hr'); # empty tag
+    # => <hr />
+    
+    say h('script', '') # empty content tag
+    # => <script></script>
+
+=back
+
+=head1 TAGSETS
+
+This modules includes shorthand modules for writes tag name as subroutine.
+
+Currently Supported:
 
 HTML5: L<Text::HyperScript::HTML5>
 
