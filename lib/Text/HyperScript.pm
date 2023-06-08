@@ -285,118 +285,73 @@ we're able to use these contants like this:
 C<false> constants exists for override value-less attributes.
 If set C<false> to exists value-less attribute, that attribute is ignored.
 
-=head1 FUNCTIONS
-
 =head2 h
 
-This function makes html/xml text by perl code. 
+This function makes html/xml text from perl code.
 
-This function is complex. but it's powerful.
+The first argument is tag name, and after argument could be passed these values as repeatable.
 
-B<Arguments>:
+NOTICE:
 
-    h($tag, [ \%attrs, $content, ...])
+The all element attributes sorted by ascendant.
 
-=over
-
-=item C<$tag>
-
-Tag name of element.
-
-This value should be C<Str> value.
-
-=item C<\%attrs> 
-
-Attributes of element.
-
-Result of attributes sorted by alphabetical according.
-
-You could pass to theses types as attribute values:
+This behaviour is intentional for same result of reproducible output.
 
 =over
 
-=item C<Str>
+=item $text : Str
 
-If you passed to this type, attribute value became a C<Str> value.
-
-For example:
-
-    h('hr', { id => 'id' }); # => '<hr id="id" />'
-
-=item C<Text::HyperScript::Boolean>
-
-If you passed to this type, attribute value became a value-less attribute.
+The text string uses as a element content.
 
 For example:
 
-    # `true()` returns Text::HyperScript::Boolean value as !!1 (true)
-    h('script', { crossorigin => true }); # => '<script crossorigin></script>'
+    use feature qw(say);
 
-=item C<ArrayRef[Str]>
+    say h('p', 'hi,') # <- 'hi,' is a plain text string
+    # => <p>hi,</p>
 
-If you passed to this type, attribute value became a B<sorted> (alphabetical according),
-delimited by whitespace C<Str> value,
+=item \%attributes : HashRef[Str | ArrayRef[Str] | HashRef[Str] ]
 
-For example:
-
-    h('hr', { class => [qw( foo bar baz )] });
-    # => '<hr class="bar baz foo">'
-
-=item C<HashRef[ Str | ArrayRef[Str] | Text::HyperScript::Boolean ]>
-
-This type is a shorthand of prefixed attributes.
-
-For example:
-
-    h('hr', { data => { id => 'foo', flags => [qw(bar baz)], enabled => true } });
-    # => '<hr data-enabled data-flags="bar baz" data-id="foo" />'
-
-=back
-
-=item C<$contnet>
-
-Contents of element.
-
-You could pass to these types:
+The element attributes could be defined by these styles:
 
 =over
 
-=item C<Str>
+=item \%attributes contains Str
 
-Plain text as content.
+In this case, Str value uses for single value of attribute.
 
-This value always applied html/xml escape.
+    use feature qw(say);
+    
+    say h('p', { id => 'msg' }, 'hi,')
+    # => <p id="msg">hi,</p>
 
-=item C<Text::HyperScript::NodeString>
+=item \%attributes contains ArrayRef[Str]
 
-Raw html/xml string as content.
+If attribute is ArrayRef[Str], these Str values joined by whitespace and sorted ascendant.
 
-B<This value does not applied html/xml escape>,
-B<you should not use this type for untrusted text>.
+    use feature qw(say);
+    
+    say h('p', { class => [qw/ foo bar baz /] }, 'hi,')
+    # => <p class="bar baz foo">hi,</p>
 
-=item C<ArrayRef[ Str | Text::HyperScript::NodeString ]>
+=item HashRef[Str]
 
-The ArrayRef of C<$content>.
+If attribute is HashRef[Str], this code means shorthand for prefixed attribute.
 
-This type value is flatten of other C<$content> value.
+    use feature qw(say);
+
+    say h('p', { data => { label => 'foo' } }, 'hi,')
+    # => <p data-label="foo"></p>
 
 =back
 
+=item \@nested : ArrayRef
+
+The all ArrayRef passed to C<h> function is flatten by internally.
+
+This ArrayRef supported all content type of C<h> function.
+
 =back
-
-=head1 QUESTION AND ANSWERS
-
-=head2 How do I get element of empty content like as `script`?
-
-This case you chould gets element string by pass to empty string.
-
-For example:
-
-    h('script', ''); # <script></script>
-
-=head2 Why all attributes and attribute values sorted by alphabetical according?
-
-This reason that gets same result on randomized orderd hash keys. 
 
 =head1 LICENSE
 
@@ -408,9 +363,5 @@ it under the same terms as Perl itself.
 =head1 AUTHOR
 
 OKAMURA Naoki a.k.a nyarla: E<lt>nyarla@kalaclista.comE<gt>
-
-=head1 SEE ALSO
-
-L<Text::HyperScript::HTML5>
 
 =cut
