@@ -202,13 +202,13 @@ This module is a html/xml tags generator like as hyperscript-ish style.
 
 =over
 
-=item All html or xml tags write as perl code!
+=item All html/xml tags write as perl code!
 
-We're able to write html/xml templates witout raw syntax.
+We're able to write html/xml templates witout raw markup.
 
-=item Generates XSS safe html or xml tags
+=item Generates automatic escaped html/xml tags
 
-This module generates XSS safe html/xml tags by default.
+This module generates automatic escaped html/xml tags by default.
 
 Like this:
 
@@ -217,9 +217,9 @@ Like this:
     say h('p', 'hello, <script>alert("XSS!")</script>')
     # => <p>hello, &lt;scrip&gt;alert("XSS!")&lt;/script&gt;</p>
 
-=item Shorthand included for multiple class name and data or aria prefixed attributes
+=item Includes shorthand for multiple class name and prefixed attributes
 
-This module has shorthand multiple class name, and data, aria or others prefixed attributes.
+This module has shorthand multiple class name, and data or aria and others prefixed attributes.
 
 For examples:
 
@@ -270,9 +270,9 @@ This function generates raw text B<without html/xml escape>.
 
 This function B<should be used for display trusted text content>.
 
-=head2 true / false (constaints)
+=head2 true / false (constants)
 
-This functions use for value-less attributes.
+This constants use for value-less attributes.
 
 For examples, if we'd like to use C<crossorigin> attriute on C<script> tag,
 we're able to use these contants like this:
@@ -283,7 +283,7 @@ we're able to use these contants like this:
     # => <scritp crossorigin></script>
 
 C<false> constants exists for override value-less attributes.
-If set C<false> to exists value-less attribute, that attribute is ignored.
+If set C<false> to value-less attribute, that attribute ignored.
 
 =head2 h
 
