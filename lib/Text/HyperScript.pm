@@ -164,7 +164,7 @@ package Text::HyperScript;
 
 =head1 NAME
 
-Text::HyperScript - The HyperScript like library for Perl.
+Text::HyperScript - Let's write html/xml templates as perl code!
 
 =head1 SYNOPSIS
 
