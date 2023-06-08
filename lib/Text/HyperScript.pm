@@ -258,6 +258,33 @@ Currently Supported:
 
 HTML5: L<Text::HyperScript::HTML5>
 
+=head1 MODULE FUNCTIONS
+
+=head2 text
+
+This function generates html/xml escaped text.
+
+=head2 raw
+
+This function generates raw text B<without html/xml escape>.
+
+This function B<should be used for display trusted text content>.
+
+=head2 true / false (constaints)
+
+This functions use for value-less attributes.
+
+For examples, if we'd like to use C<crossorigin> attriute on C<script> tag,
+we're able to use these contants like this:
+
+    use feature qw(say);
+
+    say h('scirpt', { crossorigin => true }, '')
+    # => <scritp crossorigin></script>
+
+C<false> constants exists for override value-less attributes.
+If set C<false> to exists value-less attribute, that attribute is ignored.
+
 =head1 FUNCTIONS
 
 =head2 h
@@ -356,37 +383,6 @@ This type value is flatten of other C<$content> value.
 =back
 
 =back
-
-=head2 text
-
-This function returns a html/xml escaped text.
-
-If you use untrusted stirng for display,
-you should use this function for wrapping untrusted content.
-
-=head2 raw
-
-This function makes a instance of C<Text::HyperScript::NodeString>.
-
-Instance of C<Text::HyperScript::NodeString> has C<to_string> method,
-that return text with html/xml markup.
-
-The value of C<Text::HyperScript::NodeString> always does not escaped,
-you should not use this function for display untrusted content. 
-Please use C<text> instead of this function.
-
-=head2 true / false
-
-This functions makes instance of C<Text::HyperScript::Boolean> value.
-
-Instance of C<Text::HyperScript::Boolean> has two method like as C<is_true> and C<is_false>,
-these method returns that value pointed C<true> or C<false> values.
-
-Usage of these functions for make html5 value-less attribute.
-
-For example:
-
-    h('script', { crossorigin => true }, ''); # => '<script crossorigin></script>'
 
 =head1 QUESTION AND ANSWERS
 
