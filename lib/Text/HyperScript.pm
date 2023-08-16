@@ -4,7 +4,7 @@ use warnings;
 
 package Text::HyperScript;
 
-our $VERSION = "0.07";
+our $VERSION = "0.08";
 
 use Exporter::Lite;
 
