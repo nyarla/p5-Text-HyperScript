@@ -44,7 +44,7 @@ BEGIN {
         caption col colgroup table tbody td tfoot
         th thead tr_
 
-        buttom datalist fieldset form input
+        button datalist fieldset form input
         label legend meter optgroup option
         output progress select_ textarea
 
