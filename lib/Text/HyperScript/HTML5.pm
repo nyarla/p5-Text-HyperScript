@@ -183,7 +183,7 @@ BEGIN {
 
 =head1 NAME
 
-Text::HyperScript::HTML5 - The shorthands for html5 tags by L<Text::HyperScript>.
+Text::HyperScript::HTML5 - The shorthands to html living standard tags by L<Text::HyperScript>.
 
 =head1 SYNOPSIS
 
@@ -194,60 +194,21 @@ Text::HyperScript::HTML5 - The shorthands for html5 tags by L<Text::HyperScript>
 
 =head1 SUPPORTED TAGS
 
-
-    html
-
-    base head link_ meta style title
-
-    body
-
-    address article aside footer header
-    h1 h2 h3 h4 h5 h6 main nav section
-
-    blockquote dd div dl dt figcaption figure
-    hr li menu ol p pre ul
-
-    a abbr b bdi bdo br cite code data em
-    i kbd mark q_ rp rt ruby s_ samp small
-    span strong sub_ sup time_ u var wbr
-
-    area audio img map_ track video
-
-    embed iframe object picture portal source
-
-    svg math
-
-    canvas noscript script
-
-    del ins
-
-    caption col colgroup table tbody td tfoot
-    th thead tr_
-
-    buttom datalist fieldset form input
-    label legend meter optgroup option
-    output progress select_ textarea
-
-    details dialog summary
-
-    slot template
-
+Please looking at C<@EXPORT> in the source code.
 
 =head1 GLOBAL VARIABLES
 
-=head2 $Text::HyperScript::HTML5::h : CodeRef (default is \&Text::HyperScript::h)
+=head2 C<$Text::HyperScript::HTML5::h> : CodeRef (default is C<Text::HyperScript-E<gt>can('h')>)
 
-This variable exists for replacing tag generator.
+The code reference to making tags.
 
-Default value is CodeRef of L<Text::HyperScript>'s C<h> subroutine.
-
-You could be replacing C<h> subroutine to another ones by this variable.
+This value exists for customizing tags generation.
 
 =head1 NOTICE
 
 Some shorthands have C<_> suffix.
 
-This reason is prevent conflict to between of built-in subroutines.
+This is prevent to conflict built-in syntax of perl 
 
 =head1 LICENSE
 
