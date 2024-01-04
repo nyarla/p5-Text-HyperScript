@@ -8,10 +8,6 @@ use Text::HyperScript ();
 
 our $h = Text::HyperScript->can('h');
 
-sub h {
-    goto $h;
-}
-
 BEGIN {
     # referenced from: https://developer.mozilla.org/en-US/docs/Web/HTML/Element
     # this elements list get by this oneliner:
@@ -171,7 +167,7 @@ BEGIN {
 
         *{ __PACKAGE__ . "::${func}" } = sub {
             unshift @_, $tag;
-            goto &h;
+            goto $h;
         };
     }
     use strict 'refs';
