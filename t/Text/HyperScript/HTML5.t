@@ -3,33 +3,33 @@ use warnings;
 
 use Test2::V0;
 
-use Text::HyperScript qw(true);
+use Text::HyperScript        qw(true);
 use Text::HyperScript::HTML5 qw(p hr script);
 
-sub main {
-    is( hr, '<hr />' );
-
-    is( p( 'hello, ', 'guest!' ), '<p>hello, guest!</p>' );
-
+subtest examples => sub {
+    is hr,                    '<hr />';
+    is p(q|hi, guest user!|), '<p>hi, guest user!</p>';
     is( script( { crossorigin => true }, '' ), '<script crossorigin></script>' );
+};
 
-    for my $tag (@Text::HyperScript::HTML5::EXPORT) {
-        local $@;
-        my $result = eval qq[
-          package Text::HyperScript::HTML5::Test;
+subtest html => sub {
+    for my $sub (@Text::HyperScript::HTML5::EXPORT) {
+        my $tag = $sub;
+        $tag =~ s{_}{};
+        my $done = lives {
+            my $expect = qq|<${tag} id="msg"></${tag}>|;
+            my $result = eval qq[
+              package Text::HyperScript::HTML5::Test::${tag};
+              use Text::HyperScript::HTML5;
 
-          use Text::HyperScript::HTML5;
+              return ${sub}({id => 'msg'}, '');
+            ];
 
-          return ${tag}({id=> 'test'}, '');
-        ];
+            is $result, $expect, $sub;
+        };
 
-        ok( !$@, "error of ${tag}:${@}" );
-
-        $tag =~ s{_}{}g;
-        is( $result, qq(<${tag} id="test"></${tag}>) );
+        ok $done;
     }
+};
 
-    done_testing;
-}
-
-main;
+done_testing;
