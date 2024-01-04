@@ -4,44 +4,53 @@ use warnings;
 use Test2::V0;
 use Text::HyperScript qw(h raw true);
 
-sub main {
+my $tests = [
+    'tag' => [
+        ['hr']   => '<hr />',
+        ['<hr>'] => '<&lt;hr&gt; />',
+    ],
 
-    # tag only
-    is( h('hr'),   '<hr />',         'tag only' );
-    is( h('<hr>'), '<&lt;hr&gt; />', 'tag only but with escape' );
+    'attribute' => [
+        [ 'hr', { id      => 'msg' } ]                 => '<hr id="msg" />',
+        [ 'hr', { id      => 'msg', class => 'foo' } ] => '<hr class="foo" id="msg" />',
+        [ 'hr', { id      => 'm&g' } ]                 => '<hr id="m&amp;g" />',
+        [ 'hr', { class   => [qw|foo bar baz|] } ]     => '<hr class="bar baz foo" />',
+        [ 'hr', { '<foo>' => '<bar>' } ]               => '<hr &lt;foo&gt;="&lt;bar&gt;" />',
+        [ 'hr', { '<foo>' => ['<bar>'] } ]             => '<hr &lt;foo&gt;="&lt;bar&gt;" />',
+    ],
 
-    # tag with content
-    is( h( 'p', 'hi,' ),           '<p>hi,</p>',          'tag with simple content' );
-    is( h( 'p', ['hi,'] ),         '<p>hi,</p>',          'tag with simple content but passed by array ref' );
-    is( h( 'p', '<hr />' ),        '<p>&lt;hr /&gt;</p>', 'tag with content but need escape' );
-    is( h( 'p', raw('<hr />') ),   '<p><hr /></p>',       'tag with raw html content' );
-    is( h( 'p', h( 'b', 'hi,' ) ), '<p><b>hi,</b></p>',   'tag with nested html content' );
+    'content' => [
+        [ 'p', h('hr') ]              => '<p><hr /></p>',
+        [ 'p', raw('<hr />') ]        => '<p><hr /></p>',
+        [ 'p', '<hr />' ]             => '<p>&lt;hr /&gt;</p>',
+        [ 'p', h( strong => 'hey' ) ] => '<p><strong>hey</strong></p>',
+    ],
 
-    # tag with attributes
-    is( h( 'hr', { id      => 'id' } ),                   '<hr id="id" />',                   'tag with simple attributes' );
-    is( h( 'hr', { id      => 'id', class => 'class' } ), '<hr class="class" id="id" />',     'tag with multiple attributes' );
-    is( h( 'hr', { class   => [qw(foo bar baz)] } ),      '<hr class="bar baz foo" />',       'tag with multiple attribute values by array ref' );
-    is( h( 'hr', { "<foo>" => "<bar>" } ),                '<hr &lt;foo&gt;="&lt;bar&gt;" />', 'tag with attribute but need escape' );
-    is( h( 'hr', { "<foo>" => ["<bar>"] } ),              '<hr &lt;foo&gt;="&lt;bar&gt;" />', 'tag with multiple attributes but need escape' );
+    'boolean' => [
+        [ 'script', { crossorigin => true }, '' ] => '<script crossorigin></script>',
+    ],
 
-    is( h( 'script', { crossorigin => true }, '' ), '<script crossorigin></script>', 'tag with value-less attribute' );
+    'prefixed' => [
+        [ 'hr', { data => { id     => 'msg' } } ]                 => '<hr data-id="msg" />',
+        [ 'hr', { data => { id     => 'msg', class => 'foo' } } ] => '<hr data-class="foo" data-id="msg" />',
+        [ 'hr', { data => { key    => [qw| foo bar baz |] } } ]   => '<hr data-key="bar baz foo" />',
+        [ 'hr', { data => { '<id>' => '<msg>' } } ]               => '<hr data-&lt;id&gt;="&lt;msg&gt;" />',
+        [ 'hr', { data => { '<id>' => ['<msg>'] } } ]             => '<hr data-&lt;id&gt;="&lt;msg&gt;" />',
+        [ 'hr', { data => { key    => true } } ]                  => '<hr data-key />',
+    ],
 
-    # tag with prefixed attribute
-    is( h( "hr", { data => { id     => 'id' } } ),                   '<hr data-id="id" />',                    'tag with prefixed attribute' );
-    is( h( "hr", { data => { id     => 'id', class => 'class' } } ), '<hr data-class="class" data-id="id" />', 'tag with prefixed attribute' );
-    is( h( 'hr', { data => { key    => [qw(foo bar baz)] } } ), '<hr data-key="bar baz foo" />', 'tag with multiple prefixed attribute values by array ref' );
-    is( h( "hr", { data => { "<id>" => '<id>' } } ),   '<hr data-&lt;id&gt;="&lt;id&gt;" />',    'tag with prefixed attribute but need escape' );
-    is( h( "hr", { data => { "<id>" => ['<id>'] } } ), '<hr data-&lt;id&gt;="&lt;id&gt;" />',    'tag with prefixed attribute by array ref but need escape' );
-    is( h( 'hr', { data => { key    => true } } ),     '<hr data-key />',                        'tag with value-less attribute' );
+    compelex => [
+        [ 'p', { id => 'msg' }, h( 'b', [ 'hello', ' ', 'world!' ], { data => { foo => '<bar>' } } ) ],
+        '<p id="msg"><b data-foo="&lt;bar&gt;">hello world!</b></p>'
+    ],
+];
 
-    # example
-    is(
-        h( 'p', { id => 'msg' }, h( 'b', [ 'hello', 'world' ], { data => { value => '<foo>' } } ) ),
-        '<p id="msg"><b data-value="&lt;foo&gt;">helloworld</b></p>',
-        'complex example code',
-    );
-
-    done_testing;
+while ( my ( $label, $cases ) = splice $tests->@*, 0, 2 ) {
+    subtest $label => sub {
+        while ( my ( $test, $expect ) = splice $cases->@*, 0, 2 ) {
+            is h( $test->@* ), $expect, $expect;
+        }
+    };
 }
 
-main;
+done_testing;
