@@ -45,10 +45,10 @@ my $tests = [
     ],
 ];
 
-while ( my ( $label, $cases ) = splice $tests->@*, 0, 2 ) {
+while ( my ( $label, $cases ) = splice @{$tests}, 0, 2 ) {
     subtest $label => sub {
-        while ( my ( $test, $expect ) = splice $cases->@*, 0, 2 ) {
-            is h( $test->@* ), $expect, $expect;
+        while ( my ( $test, $expect ) = splice @{$cases}, 0, 2 ) {
+            is h( @{$test} ), $expect, $expect;
         }
     };
 }
