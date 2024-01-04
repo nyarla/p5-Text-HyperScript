@@ -14,43 +14,154 @@ sub h {
 
 BEGIN {
     # referenced from: https://developer.mozilla.org/en-US/docs/Web/HTML/Element
-    our @EXPORT = qw(
-        html
+    # this elements list get by this oneliner:
+    # Array.from(document.querySelectorAll('article section td:first-child a')).map(x => x.textContent.replace(/[<>]/g, `"`)).join(",\n")
+    our @EXPORT = (
 
-        base head link_ meta style title
+        # Main root
+        "html",
 
-        body
+        # Document metadata
+        "base",
+        "head",
+        "link",
+        "meta",
+        "style",
+        "title",
 
-        address article aside footer header
-        h1 h2 h3 h4 h5 h6 main nav section
+        # Sectioning root
+        "body",
 
-        blockquote dd div dl dt figcaption figure
-        hr li menu ol p pre ul
+        # Content sectioning
+        "address",
+        "article",
+        "aside",
+        "footer",
+        "header",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hgroup",
+        "main",
+        "nav",
+        "section",
+        "search",
 
-        a abbr b bdi bdo br cite code data em
-        i kbd mark q_ rp rt ruby s_ samp small
-        span strong sub_ sup time_ u var wbr
+        # Text content
+        "blockquote",
+        "dd",
+        "div",
+        "dl",
+        "dt",
+        "figcaption",
+        "figure",
+        "hr",
+        "li",
+        "menu",
+        "ol",
+        "p",
+        "pre",
+        "ul",
 
-        area audio img map_ track video
+        # Inline text semantics
+        "a",
+        "abbr",
+        "b",
+        "bdi",
+        "bdo",
+        "br",
+        "cite",
+        "code",
+        "data",
+        "dfn",
+        "em",
+        "i",
+        "kbd",
+        "mark",
+        "q_",
+        "rp",
+        "rt",
+        "ruby",
+        "s_",
+        "samp",
+        "small",
+        "span",
+        "strong",
+        "sub_",
+        "sup",
+        "time_",
+        "u",
+        "var",
+        "wbr",
 
-        embed iframe object picture portal source
+        # Images and multimedia
+        "area",
+        "audio",
+        "img",
+        "map_",
+        "track",
+        "video",
 
-        svg math
+        # Embedded content
+        "embed",
+        "iframe",
+        "object",
+        "picture",
+        "portal",
+        "source",
 
-        canvas noscript script
+        # SVG and MathML
+        "svg",
+        "math",
 
-        del ins
+        # Scripting
+        "canvas",
+        "noscript",
+        "script",
 
-        caption col colgroup table tbody td tfoot
-        th thead tr_
+        # Demarcating edits
+        "del",
+        "ins",
 
-        button datalist fieldset form input
-        label legend meter optgroup option
-        output progress select_ textarea
+        # Table content
+        "caption",
+        "col",
+        "colgroup",
+        "table",
+        "tbody",
+        "td",
+        "tfoot",
+        "th",
+        "thead",
+        "tr_",
 
-        details dialog summary
+        # Forms
+        "button",
+        "datalist",
+        "fieldset",
+        "form",
+        "input",
+        "label",
+        "legend",
+        "meter",
+        "optgroup",
+        "option",
+        "output",
+        "progress",
+        "select_",
+        "textarea",
 
-        slot template
+        # Interactive elements
+        "details",
+        "dialog",
+        "summary",
+
+        # Web Components
+        "slot",
+        "template",
     );
 
     no strict 'refs';
