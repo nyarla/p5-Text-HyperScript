@@ -1,0 +1,46 @@
+---
+name: Matrix tests for Text::HyperScript
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/test-matrix.yml"
+      - "cpanfile"
+      - "lib/**"
+      - "t/**"
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    name: Running tests on perl version of v${{ matrix.perl }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl:
+          - "5.38"
+          - "5.36"
+          - "5.34"
+          - "5.32"
+          - "5.30"
+          - "5.28"
+          - "5.26"
+          - "5.24"
+          - "5.22"
+          - "5.20"
+          - "5.18"
+          - "5.16"
+          - "5.14"
+          - "5.12"
+          - "5.10"
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: shogo82148/actions-setup-perl@ea0507898383e7dbce382138da0c21af1849eb9e # v1.27.0
+        with:
+          perl-verson: ${{ matrix.perl }}
+          install-modules-with: cpm
+          install-modules: |
+            Minilla
+      - name: Run tests
+        run: prove -lvr t
