@@ -36,7 +36,7 @@ jobs:
           - "5.10"
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - uses: shogo82148/actions-setup-perl@b6cfc127f1b0a63ac98797800f641494d80f42f8 # v1.37.1
+      - uses: shogo82148/actions-setup-perl@922d4ec780f14b8ff6d6e09c15d5eaee240b23a0 # v1.40.1
         with:
           perl-version: ${{ matrix.perl }}
           install-modules-with: cpm
