@@ -35,7 +35,7 @@ jobs:
           - "5.12"
           - "5.10"
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - uses: shogo82148/actions-setup-perl@b6cfc127f1b0a63ac98797800f641494d80f42f8 # v1.37.1
         with:
           perl-version: ${{ matrix.perl }}
